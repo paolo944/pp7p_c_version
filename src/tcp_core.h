@@ -3,6 +3,6 @@
 
 int connect_to_server();
 
-void send_and_receive(int sock, const char *message);
+char *send_and_receive(int sock, const char *message);
 
 #endif

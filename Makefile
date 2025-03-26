@@ -1,16 +1,17 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g 
 SRC_DIR = src
+ROUTES_DIR = routes
 OBJ_DIR = obj
-BIN = lol_api
+BIN = pp7p
 
-SRC = $(wildcard $(SRC_DIR)/*.c routes/*.c)
-OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+SRC = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(ROUTES_DIR)/*.c)
+OBJ = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
 
 $(BIN): $(OBJ) main.c
 	$(CC) $(CFLAGS) $^ -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: %.c
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 

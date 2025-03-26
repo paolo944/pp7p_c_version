@@ -7,11 +7,12 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
+#include <arpa/inet.h>
 #include <errno.h>
 #include <unistd.h>
 #include <pthread.h>
-#include <sys/epoll.h>
 #include <fcntl.h>
+
 #include "hash_table.h"
 
 #define BUFFER_SIZE 1024
@@ -25,17 +26,17 @@ typedef struct {
     int active;
 } Client;
 
-Client subtitles_clients[MAX_CLIENTS];
-Client clocks_clients[MAX_CLIENTS];
-Client teleprompter_clients[MAX_CLIENTS];
+extern Client subtitles_clients[MAX_CLIENTS];
+extern Client clocks_clients[MAX_CLIENTS];
+extern Client teleprompter_clients[MAX_CLIENTS];
 
 typedef struct {
     int client_socket;
     HashTable *table;
 }ThreadArgs;
 
-void launch_server(HashTable *table);
+extern pthread_mutex_t lock;
 
-int set_nonblocking(int fd);
+void launch_server(HashTable *table);
 
 #endif

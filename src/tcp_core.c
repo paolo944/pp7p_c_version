@@ -1,4 +1,5 @@
 #include "http_core.h"
+#include <stdio.h>
 
 int connect_to_server()
 {
@@ -33,18 +34,20 @@ int connect_to_server()
 }
 
 
-void send_and_receive(int sock, const char *message) //Changer pour voir ce que je recois
+char *send_and_receive(int sock, const char *message) //Changer pour voir ce que je recois
 {
     char buffer[BUFFER_SIZE];
 
     send(sock, message, strlen(message), 0);
-    printf("Sent: %s\n", message);
 
     int bytes_received = recv(sock, buffer, BUFFER_SIZE - 1, 0);
     if (bytes_received > 0) {
         buffer[bytes_received] = '\0';
-        printf("Server response: %s\n", buffer);
+        char *recv_buff = (char *)malloc((bytes_received + 1)*sizeof(char));
+        memcpy(recv_buff, buffer, bytes_received + 1);
+        return recv_buff;
     } else {
         printf("No response received or connection closed\n");
+        return NULL;
     }
 }

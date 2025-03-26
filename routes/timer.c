@@ -1,106 +1,56 @@
 #include "timer.h"
 #include "../src/tcp_core.h"
-#include <cjson/cJSON.h>
-                    
-void play(pp7, uuid)
-{
-    char *url = "v1/timer/%s/play";
+#include <stdio.h>
 
-    cJSON *request = cJSON_CreateObject(); 
-    cJSON_AddStringToObject(request, "url", url); 
-    char *request_str = cJSON_PrintUnformatted(request); //Changer pour ajouter le \r\n à la fin et adapter
+void timer_action(const char *uuid, const char *action)
+{
+    char request[1024];
+    sprintf(request, "{\"url\":\"v1/timer/%s/%s\",\"method\":\"GET\"}", uuid, action);
 
     int pp7 = connect_to_server();
 
-    send_and_receive(pp7, request_str)
-
-    //Si je reçois rien alors c'est bon et j'envoio au client un http avec code 204
-
-        if response.status_code == 204:
-            return True
-        else:
-            printf(f'Échec de la requête. Code de statut : {response.status_code}')
-
-    free(request_str);
-    cJSON_Delete(request);
+    char *buff = send_and_receive(pp7, request);
+    if(buff == NULL)
+        return;
+    else{
+        fprintf(stderr, "%s\n", buff);
+    }
 }
-    def pause(self, uuid):
-        headers = {
-            'Content-Type': 'application/json',
-            'accept': '*/*'
-        }
 
-        response = requests.get(f"{self.url}/{uuid}/stop", headers=headers)
+void timer_delete(const char *uuid)
+{
+    char request[1024];
+    sprintf(request, "{\"url\":\"v1/timer/%s\",\"method\":\"DELETE\"}", uuid);
 
-        if response.status_code == 204:
-            print(f"Clock {uuid} stopped")
-            return True
-        else:
-            print(f'Échec de la requête. Code de statut : {response.status_code}')
-            return False
+    int pp7 = connect_to_server();
+    char *buff = send_and_receive(pp7, request);
+    if(buff == NULL)
+        return;
+    else{
+        fprintf(stderr, "%s\n", buff);
+    }
+}
 
-    def reset(self, uuid):
-        headers = {
-            'Content-Type': 'application/json',
-            'accept': '*/*'
-        }
+void timer_add(const char *data)
+{
+    char body[400];
+    char request[1024];
 
-        response = requests.get(f"{self.url}/{uuid}/reset", headers=headers)
+    int hours;
+    int minutes;
+    int seconds;
+    char *name;
+    seconds += hours*3600 + minutes*60;
 
-        if response.status_code == 204:
-            print(f"Clock {uuid} reset")
-            return True
-        else:
-            print(f'Échec de la requête. Code de statut : {response.status_code}')
-            return False
-
-    def delete(self, uuid):
-        headers = {
-            'Content-Type': 'application/json',
-            'accept': '*/*'
-        }
-
-        response = requests.delete(f"{self.url}/{uuid}", headers=headers)
-
-        if response.status_code == 204:
-            print(f"Clock {uuid} deleted")
-            return True
-        else:
-            print(f'Échec de la requête. Code de statut : {response.status_code}')
-            return False
-
-    def post(self, data):
-        headers = {
-            'Content-Type': 'application/json',
-            'accept': '*/*'
-        }
-
-        hours = data.get('hours')
-        minutes = data.get('minutes')
-        seconds = data.get('seconds')
-        name = data.get('clock_name')
-
-        seconds = int(seconds)
-        seconds += int(minutes) * 60
-        seconds += int(hours) * 3600
-
-        data = {
-            "allows_overrun": True,
-            "countdown": {
-                "duration": seconds
-            },
-            "name": name
-        }
-
-        json_data = json.dumps(data)
-
-        response = requests.post(f"{self.url}s", headers=headers, data=json_data)
-
-        if response.status_code == 200:
-            print(f"Clock {name} ajouté")
-            return True
-        else:
-            print(f'Échec de la requête. Ajout clock, Code de statut : {response.status_code}')
-            return False
+    sprintf(request, "{\"url\":\"v1/timers\",\"method\":\"POST\",\"body\":%s}", body);
     
-    
+    int pp7 = connect_to_server();
+    char *buff = send_and_receive(pp7, request);
+    if(buff == NULL){
+        fprintf(stderr, "Erreur pendant l'ajout de la clock\n");
+        return;
+    }
+    else{
+        return;
+    }
+}
