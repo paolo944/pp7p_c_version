@@ -15,4 +15,6 @@ char *getHeaderAttribute(const char buffer[BUFFER_SIZE], const char *attribute);
 
 char *getBody(const char buffer[BUFFER_SIZE]);
 
+int getCode(const char buffer[BUFFER_SIZE]);
+
 #endif

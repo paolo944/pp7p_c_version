@@ -31,7 +31,7 @@ void launch_server(HashTable *table)
 		return;
 	}
 
-	printf("Waiting for a client to connect...\n");
+	printf("Server listening on 127.0.0.1:%d\n", PORT);
 	client_addr_len = sizeof(client_addr);
 
 	while(1)

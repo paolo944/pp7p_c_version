@@ -133,3 +133,15 @@ char *getBody(const char buffer[BUFFER_SIZE])
 	body[body_len] = '\0';
 	return body;
 }
+
+int getCode(const char buffer[BUFFER_SIZE])
+{
+    const char *start_code = strstr(buffer, " ") + 1;
+    const char *end_code = strstr(start_code, " ") - 1;
+
+    char code_str[4];
+    memcpy(code_str, start_code, end_code - start_code);
+    code_str[4] = '\0';
+    int code = atoi(code_str);
+    return code;
+}

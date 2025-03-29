@@ -10,7 +10,7 @@ void route(const char buffer[BUFFER_SIZE], int client_socket, HashTable *table)
 
 	if(handler == NULL)
 	{
-		printf("Didn't find the endpoint: %s\n", endpoint);
+		fprintf(stderr, "Didn't find the endpoint: %s\n", endpoint);
 		const char *response = "HTTP/1.1 404 Not Found\r\n\r\n";
     	send(client_socket, response, strlen(response), 0);
 		close(client_socket);

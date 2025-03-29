@@ -1,4 +1,5 @@
 #include "src/http_core.h"
+#include "routes/timer.h"
 
 int main()
 {
@@ -7,6 +8,7 @@ int main()
 
 	HashTable table;
 	initializeHashTable(&table);
+    insert(&table, "timer", timer_handler);
 
 	launch_server(&table);
 
