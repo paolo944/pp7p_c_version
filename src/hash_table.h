@@ -1,7 +1,7 @@
 #ifndef HASH_TABLE_H
 #define HASH_TABLE_H
 
-#define TABLE_SIZE 2
+#define TABLE_SIZE 20
 
 typedef void (*FunctionPointer)(int, const char *buffer);
 

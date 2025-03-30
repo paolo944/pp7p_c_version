@@ -353,6 +353,7 @@ fetchStreamData();
 
 document.getElementById('toggle-dark-mode').addEventListener('click', function() {
     document.body.classList.toggle('light-mode');
+    console.log("toggle dark mode");
     const button = document.getElementById('toggle-dark-mode');
     const icon = button.querySelector('i');
     if (document.body.classList.contains('light-mode')) {
