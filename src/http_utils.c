@@ -1,5 +1,7 @@
 #include "http_utils.h"
 #include "routing.h"
+#include <sys/sendfile.h>
+#include <sys/stat.h>
 
 void *handle_connection(void *arg)
 {
@@ -21,7 +23,7 @@ void *handle_connection(void *arg)
 	return NULL;
 }
 
-void send_file(int client_socket, const char *fn, const char *content_type, int gzip)
+void send_file(int client_socket, const char *fn, const char *content_type, int gzip, int keep_alive)
 {
     int f = open(fn, O_RDONLY);
     if(f == -1)
@@ -31,22 +33,35 @@ void send_file(int client_socket, const char *fn, const char *content_type, int 
         send(client_socket, error_message, strlen(error_message), 0);
         return ;
     }
-    char buffer[BUFFER_SIZE];
-    int bytes_read;
+
+    struct stat st;
+    if(fstat(f, &st) == -1)
+    {
+        perror("Error getting file size");
+        close(f);
+        return;
+    }
 
     char header[256];
     snprintf(header, sizeof(header),
              "HTTP/1.1 200 OK\r\n"
              "Content-Type: %s\r\n"
              "%s"
+             "%s"
+             "Content-Length: %ld\r\n"
              "Connection: close\r\n\r\n",
              content_type,
-             gzip ? "Content-Encoding: gzip\r\n": "");
+             gzip ? "Content-Encoding: gzip\r\n": "", 
+             keep_alive ? "Connection: keep-alive\r\nKeep-Alive: timeout=5, max=100": "Connection: close",
+             st.st_size);
     send(client_socket, header, strlen(header), 0);
 
-    while((bytes_read = read(f, buffer, sizeof(buffer))) > 0)
-        send(client_socket, buffer, bytes_read, 0);
-
+    off_t offset = 0;
+    ssize_t sent_bytes = sendfile(client_socket, f, &offset, st.st_size);
+    if(sent_bytes == -1)
+        perror("Error sending file");
     close(f);
+    if(!keep_alive)
+        close(client_socket);
     return;
 }

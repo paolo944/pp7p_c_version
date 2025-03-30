@@ -12,30 +12,29 @@ void index_route(int client_socket, const char buffer[BUFFER_SIZE])
     if(gzip == 0)
     {
         if(strcmp(endpoint, "") == 0)
-            send_file(client_socket, "templates/index.html", "text/html", gzip);
+            send_file(client_socket, "templates/index.html", "text/html", gzip, 0);
         else if(strcmp(endpoint, "style.css") == 0)
-            send_file(client_socket, "static/style.css", "text/css", gzip);
+            send_file(client_socket, "static/style.min.css", "text/css", gzip, 0);
         else if(strcmp(endpoint, "scripts.js") == 0)
-            send_file(client_socket, "static/scripts.js", "application/javascript", gzip);
+            send_file(client_socket, "static/scripts.min.js", "application/javascript", gzip, 0);
         else if(strcmp(endpoint, "favicon.ico") == 0)
-            send_file(client_socket, "static/favicon.ico", "application/javascript", gzip);
+            send_file(client_socket, "static/favicon.ico", "application/javascript", gzip, 0);
         else if(strcmp(endpoint, "installHook.js.map") == 0)
-            send_file(client_socket, "static/installHook.js.map", "application/javascript", gzip);
+            send_file(client_socket, "static/installHook.js.map", "application/javascript", gzip, 0);
     }
     else
     {
         if(strcmp(endpoint, "") == 0)
-            send_file(client_socket, "templates/index.html.gz", "text/html", gzip);
+            send_file(client_socket, "templates/index.html.gz", "text/html", gzip, 0);
         else if(strcmp(endpoint, "style.css") == 0)
-            send_file(client_socket, "static/style.css.gz", "text/css", gzip);
+            send_file(client_socket, "static/style.min.css.gz", "text/css", gzip, 0);
         else if(strcmp(endpoint, "scripts.js") == 0)
-            send_file(client_socket, "static/scripts.js.gz", "application/javascript", gzip);
+            send_file(client_socket, "static/scripts.min.js.gz", "application/javascript", gzip, 0);
         else if(strcmp(endpoint, "favicon.ico") == 0)
-            send_file(client_socket, "static/favicon.ico.gz", "application/javascript", gzip);
+            send_file(client_socket, "static/favicon.ico.gz", "application/javascript", gzip, 0);
         else if(strcmp(endpoint, "installHook.js.map") == 0)
-            send_file(client_socket, "static/installHook.js.map.gz", "application/javascript", gzip);
+            send_file(client_socket, "static/installHook.js.map.gz", "application/javascript", gzip, 0);
 
     }
-    close(client_socket);
     return;
 }

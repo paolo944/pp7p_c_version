@@ -6,6 +6,6 @@
 
 void *handle_connection(void *arg);
 
-void send_file(int client_socket, const char *fn, const char *content_type, int gzip);
+void send_file(int client_socket, const char *fn, const char *content_type, int gzip, int keep_alive);
 
 #endif

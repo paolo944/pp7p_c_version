@@ -17,6 +17,7 @@ void route(const char buffer[BUFFER_SIZE], int client_socket, HashTable *table)
 		return;
 	}
 
+    fcntl(client_socket, F_SETFL, O_NONBLOCK);
 	handler(client_socket, buffer);
 
 	free(endpoint);
