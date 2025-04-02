@@ -32,11 +32,10 @@ extern Client teleprompter_clients[MAX_CLIENTS];
 
 typedef struct {
     int client_socket;
-    HashTable *table;
 }ThreadArgs;
 
 extern pthread_mutex_t lock;
 
-void launch_server(HashTable *table);
+void launch_server();
 
 #endif

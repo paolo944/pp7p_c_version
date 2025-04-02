@@ -7,7 +7,6 @@ void *handle_connection(void *arg)
 {
 	ThreadArgs *args = (ThreadArgs*)arg;
 	int client_socket = args->client_socket;
-	HashTable *table = args->table;
 
 	char buffer[BUFFER_SIZE] = {0};	
 
@@ -18,7 +17,7 @@ void *handle_connection(void *arg)
 		return NULL;
 	}
 
-	route(buffer, client_socket, table);
+	route(buffer, client_socket);
 
 	return NULL;
 }

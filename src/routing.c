@@ -2,11 +2,11 @@
 #include "hash_table.h"
 #include "parser.h"
 
-void route(const char buffer[BUFFER_SIZE], int client_socket, HashTable *table)
+void route(const char buffer[BUFFER_SIZE], int client_socket)
 {
 	//Get the endpoint in the hashtable and use the fonction
 	char *endpoint = get_endpoint(buffer);
-	FunctionPointer handler = getFunction(table, endpoint);
+	FunctionPointer handler = getFunction(endpoint);
 
 	if(handler == NULL)
 	{

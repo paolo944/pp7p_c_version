@@ -15,8 +15,8 @@ void index_route(int client_socket, const char buffer[BUFFER_SIZE])
         send_file(client_socket, "static/style.min.css", "text/css", gzip);
     else if(strcmp(endpoint, "scripts.min.js") == 0)
         send_file(client_socket, "static/scripts.min.js", "application/javascript", gzip);
-    else if(strcmp(endpoint, "favicon.png") == 0)
-        send_file(client_socket, "static/favicon.png", "application/javascript", gzip);
+    else if(strcmp(endpoint, "favicon.ico") == 0)
+        send_file(client_socket, "static/favicon_io/favicon.ico", "application/javascript", gzip);
     else if(strcmp(endpoint, "installHook.js.map") == 0)
         send_file(client_socket, "static/installHook.js.map", "application/javascript", gzip);
     return;

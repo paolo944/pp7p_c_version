@@ -14,14 +14,16 @@ typedef struct {
     HashEntry *entries[TABLE_SIZE];
 } HashTable;
 
+extern HashTable table;
+
 unsigned int hashFunction(const char *key);
 
-void initializeHashTable(HashTable *table);
+void initializeHashTable();
 
-void insert(HashTable *table, const char *key, FunctionPointer function);
+void insert(const char *key, FunctionPointer function);
 
-FunctionPointer getFunction(HashTable *table, const char *key);
+FunctionPointer getFunction(const char *key);
 
-void freeHashTable(HashTable *table);
+void freeHashTable();
 
 #endif

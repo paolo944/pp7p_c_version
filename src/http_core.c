@@ -1,10 +1,30 @@
 #include "http_utils.h"
 #include "http_core.h"
 #include "hash_table.h"
+#include <signal.h>
 
-void launch_server(HashTable *table)
+int server_fd;
+
+void handle_signal(int signal)
 {
-    int server_fd, client_addr_len;
+    printf("\n Received signal %d, Stopping the server\n", signal);
+
+    if(server_fd != -1)
+    {
+        close(server_fd);
+        printf("Server socket closed\n");
+    }
+
+	freeHashTable();
+    exit(0);
+}
+
+void launch_server()
+{
+    signal(SIGINT, handle_signal);
+    signal(SIGTERM, handle_signal);
+
+    int client_addr_len;
 	struct sockaddr_in client_addr;
 
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -31,7 +51,7 @@ void launch_server(HashTable *table)
 		return;
 	}
 
-	printf("Server listening on 127.0.0.1:%d\n", PORT);
+	printf("Server listening on http://127.0.0.1:%d\n", PORT);
 	client_addr_len = sizeof(client_addr);
 
 	while(1)
@@ -44,7 +64,6 @@ void launch_server(HashTable *table)
 		pthread_t new_process;
     	ThreadArgs *args = malloc(sizeof(ThreadArgs));
     	args->client_socket = client_fd;
-    	args->table = table;
     	pthread_create(&new_process, NULL, handle_connection, args);
 	}
 
