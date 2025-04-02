@@ -80,6 +80,7 @@ void handle_signal(int signal)
 
 void launch_server()
 {
+    pthread_t threads[100];
     signal(SIGINT, handle_signal);
     signal(SIGTERM, handle_signal);
 

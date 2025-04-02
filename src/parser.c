@@ -19,7 +19,7 @@ char *getMethod(const char buffer[BUFFER_SIZE])
 
 char *getURL(const char buffer[BUFFER_SIZE])
 {
-    const char *start_url = strstr(buffer, "/");
+    const char *start_url = strstr(buffer, "/") + 1;
 	const char *end_url = strstr(buffer, " H");
 	size_t url_len = end_url - start_url;
 

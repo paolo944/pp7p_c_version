@@ -10,6 +10,7 @@ int main()
 	initializeHashTable();
     insert("timer", timer_handler);
     insert("", index_route);
+	insert("public", public_route);
 	launch_server();
 
 	return 0;

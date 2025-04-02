@@ -9,15 +9,38 @@ void index_route(int client_socket, const char buffer[BUFFER_SIZE])
     char *c = strstr(buffer, "gzip");
     int gzip = 0 ? c == NULL : 1;
 
-    if(strcmp(endpoint, "") == 0)
-        send_file(client_socket, "templates/index.html", "text/html", gzip);
-    else if(strcmp(endpoint, "style.min.css") == 0)
-        send_file(client_socket, "static/style.min.css", "text/css", gzip);
-    else if(strcmp(endpoint, "scripts.min.js") == 0)
-        send_file(client_socket, "static/scripts.min.js", "application/javascript", gzip);
-    else if(strcmp(endpoint, "favicon.ico") == 0)
-        send_file(client_socket, "static/favicon_io/favicon.ico", "application/javascript", gzip);
-    else if(strcmp(endpoint, "installHook.js.map") == 0)
-        send_file(client_socket, "static/installHook.js.map", "application/javascript", gzip);
+    send_file(client_socket, "public/index.html", "text/html", gzip);
+    free(endpoint);
+    return;
+}
+
+void public_route(int client_socket, const char buffer[BUFFER_SIZE])
+{
+    char *file = getURL(buffer);
+    char *c = strstr(buffer, "gzip");
+    int gzip = 0 ? c == NULL : 1;
+
+    char *double_point = strstr(file, "..");
+    char *root = strstr(file, "~");
+
+    if(double_point != NULL || root != NULL)
+    {
+        printf("espèce de petit cachottier\n");
+        close(client_socket);
+        free(file);
+        return;
+    }
+
+    char MIME[256];
+
+    if(strstr(file, ".css"))
+        snprintf(MIME, sizeof(MIME), "text/css");
+    else if(strstr(file, ".js"))
+        snprintf(MIME, sizeof(MIME), "application/javascript");
+    else if(strstr(file, ".ico"))
+        snprintf(MIME, sizeof(MIME), "image/x-icon");
+
+    send_file(client_socket, file, MIME, gzip);
+    free(file);
     return;
 }

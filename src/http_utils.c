@@ -22,7 +22,7 @@ void *handle_connection(void *arg)
 	return NULL;
 }
 
-void send_file(int client_socket, const char *fn, const char *content_type, int gzip)
+void send_file(int client_socket, const char *fn, const char *MIME, int gzip)
 {
     char fnp[100];
     if (gzip)
@@ -57,7 +57,7 @@ void send_file(int client_socket, const char *fn, const char *content_type, int 
              "%s"
              "Content-Length: %ld\r\n"
              "Connection: close\r\n\r\n",
-             content_type,
+             MIME,
              gzip ? "Content-Encoding: gzip\r\n": "", 
              st.st_size);
     send(client_socket, header, strlen(header), 0);
