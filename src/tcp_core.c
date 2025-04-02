@@ -15,8 +15,8 @@ int connect_to_server()
 
     // Define server address
     server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(PP7_PORT);
-    if (inet_pton(AF_INET, PP7_IP, &server_addr.sin_addr) <= 0) {
+    server_addr.sin_port = htons(config.api_port);
+    if (inet_pton(AF_INET, config.api_server, &server_addr.sin_addr) <= 0) {
         perror("Invalid address");
         close(sock);
         return -1;
@@ -29,7 +29,7 @@ int connect_to_server()
         return -1;
     }
 
-    printf("Connected to server at %s:%d\n", PP7_IP, PP7_PORT);
+    printf("Connected to server at %s:%d\n", config.api_server, config.api_port);
     return sock;
 }
 

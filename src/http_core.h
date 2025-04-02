@@ -15,11 +15,17 @@
 
 #include "hash_table.h"
 
-#define BUFFER_SIZE 1024
 #define MAX_CLIENTS 20
-#define PORT 8080
-#define PP7_IP "127.0.0.1"
-#define PP7_PORT 9000
+#define MAX_LINE_LENGTH 256
+#define BUFFER_SIZE 2048
+
+typedef struct {
+    int server_port;
+    int api_port;
+    char api_server[64];
+} Config;
+
+extern Config config;
 
 typedef struct {
     int fd;

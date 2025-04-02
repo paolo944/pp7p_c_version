@@ -1,3 +1,4 @@
 obj/
 pp7p
 *.gz
+.env
