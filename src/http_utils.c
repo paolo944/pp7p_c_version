@@ -19,6 +19,8 @@ void *handle_connection(void *arg)
 
 	route(buffer, client_socket);
 
+    free(arg);
+
 	return NULL;
 }
 

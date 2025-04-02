@@ -80,7 +80,6 @@ void handle_signal(int signal)
 
 void launch_server()
 {
-    pthread_t threads[100];
     signal(SIGINT, handle_signal);
     signal(SIGTERM, handle_signal);
 
@@ -142,8 +141,21 @@ void launch_server()
 
         pthread_t new_process;
         ThreadArgs *args = malloc(sizeof(ThreadArgs));
+        if (args == NULL) {
+            perror("Erreur d'allocation mémoire");
+            close(client_fd);
+            continue;
+        }
         args->client_socket = client_fd;
-        pthread_create(&new_process, NULL, handle_connection, args);
+        if (pthread_create(&new_process, NULL, handle_connection, args) != 0) {
+            perror("Erreur de création de thread");
+            free(args);
+            close(client_fd);
+            continue;
+        }
+
+        // Détacher le thread pour que ses ressources soient libérées automatiquement
+        pthread_detach(new_process);
     }
 
     close(server_fd);
