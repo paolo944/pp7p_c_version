@@ -128,10 +128,14 @@ char *getBody(const char buffer[BUFFER_SIZE])
         printf("Erreur pendant l'allocation\n");
         return NULL;
     }
-
-	strncpy(body, start_body, body_len);
-	body[body_len] = '\0';
-	return body;
+    if(body_len > 0)
+    {
+        strncpy(body, start_body, body_len);
+	    body[body_len] = '\0';
+    }
+    else
+        body[0] = '\0';
+    return body;
 }
 
 int getCode(const char buffer[BUFFER_SIZE])
@@ -139,7 +143,7 @@ int getCode(const char buffer[BUFFER_SIZE])
     const char *start_code = strstr(buffer, " ") + 1;
     const char *end_code = strstr(start_code, " ") - 1;
 
-    char code_str[4];
+    char code_str[5];
     memcpy(code_str, start_code, end_code - start_code);
     code_str[4] = '\0';
     int code = atoi(code_str);

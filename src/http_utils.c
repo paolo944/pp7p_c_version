@@ -23,9 +23,18 @@ void *handle_connection(void *arg)
 	return NULL;
 }
 
-void send_file(int client_socket, const char *fn, const char *content_type, int gzip, int keep_alive)
+void send_file(int client_socket, const char *fn, const char *content_type, int gzip)
 {
-    int f = open(fn, O_RDONLY);
+    char fnp[100];
+    if (gzip)
+    {
+        snprintf(fnp, sizeof(fnp), "%s.gz", fn);  // Ajoute .gz si gzip est activé
+    } 
+    else
+    {
+        snprintf(fnp, sizeof(fnp), "%s", fn);  // Sinon, garde le nom normal
+    }
+    int f = open(fnp, O_RDONLY);
     if(f == -1)
     {
         fprintf(stderr, "didn't find %s\n", fn);
@@ -47,12 +56,10 @@ void send_file(int client_socket, const char *fn, const char *content_type, int 
              "HTTP/1.1 200 OK\r\n"
              "Content-Type: %s\r\n"
              "%s"
-             "%s"
              "Content-Length: %ld\r\n"
              "Connection: close\r\n\r\n",
              content_type,
              gzip ? "Content-Encoding: gzip\r\n": "", 
-             keep_alive ? "Connection: keep-alive\r\nKeep-Alive: timeout=5, max=100": "Connection: close",
              st.st_size);
     send(client_socket, header, strlen(header), 0);
 
@@ -61,7 +68,6 @@ void send_file(int client_socket, const char *fn, const char *content_type, int 
     if(sent_bytes == -1)
         perror("Error sending file");
     close(f);
-    if(!keep_alive)
-        close(client_socket);
+    close(client_socket);
     return;
 }

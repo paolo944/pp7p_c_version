@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g 
+CFLAGS = -Wall -Wextra -g -Oz
 SRC_DIR = src
 ROUTES_DIR = routes
 OBJ_DIR = obj
